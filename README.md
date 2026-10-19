@@ -87,6 +87,23 @@ python tools/swap_lib.py --apk base.apk --lib build/libpvhook.so --out prime-adb
 adb install -r prime-adblock.apk
 ```
 
+### Signing keys, in practice
+
+* **Keep your login (recommended):** Android only updates an app in place if the new APK is signed with the same key as
+  the installed one. Export Morphe Manager's key (Settings → System → Signing key → Export, a `.keystore` in BKS format) and
+  convert it once to PKCS12, which `apksigner` can read:
+  `keytool -importkeystore -srckeystore morphe.keystore -srcstoretype BKS -destkeystore morphe.p12 -deststoretype PKCS12 -providerpath bcprov.jar -providerclass org.bouncycastle.jce.provider.BouncyCastleProvider`
+  (any BouncyCastle `bcprov` jar works; list the alias with `keytool -list`).
+* **No key to hand:** sign with a new key (`keytool -genkeypair -keystore my.p12 -storetype PKCS12 -alias me -keyalg RSA -keysize 2048 -validity 3650`),
+  then `adb uninstall com.amazon.amazonvideo.livingroom.mod` before installing; you will have to sign in to Prime again.
+
+### What has been tested end to end
+
+Verified: building from source, `tools/swap_lib.py` (library replaced, aligned, signature valid), `tools/find_inflate.py`
+(finds the 6.23.23 offset by itself), and the hook on a real Fire TV (tag `v0.1-verified`). **Not yet verified by a third
+party:** the whole chain on a fresh machine, and the signing/conversion notes above on other setups. Issues and PRs with your
+results are exactly what this project needs.
+
 ## Check that it works
 
 ```bash
