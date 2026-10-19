@@ -10,6 +10,14 @@ exact point where it is decompressed. No DNS tricks, no proxy, no rooted device.
 
 [Version française en bas / French summary below](#résumé-français)
 
+## Why there is no APK in this repository
+
+Prime Video is Amazon's copyrighted software. A patched APK (or decompiled sources) would redistribute that code, which
+we will not do and which would get this repository taken down. Everything here is built **from your own copy** of the app:
+the official APK from APKMirror (the same download links as the upstream patches), patched on your machine. What we
+publish is ours: the native library source and a prebuilt binary, the tools, and a complete explanation of the findings
+([docs/REVERSE_ENGINEERING.md](docs/REVERSE_ENGINEERING.md)) so that you can reproduce, check and extend all of it.
+
 ## What you get
 
 * The ad break simply never appears: playback continues, the progress bar loses its ad markers.
@@ -36,7 +44,11 @@ Details: [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md).
 * To build: Android NDK r25+ and the Android SDK `cmake`, `ninja` and `build-tools` packages. Or use the prebuilt library in `prebuilt/`.
 * `adb` access to the TV (Settings → My Fire TV → Developer options → ADB debugging).
 
-## Install
+## Install (from scratch, with your own APK)
+
+**Step 0.** Download **Prime Video (Android TV) 6.23.23+v15.5.0.70-armv7a** (`.apkm`) from APKMirror (the link is in the
+upstream README), patch it with Morphe Manager and the Prime Video patch with **"Optimize for device architecture" OFF**,
+install the result on the TV and check that it plays. Then replace its native library with ours:
 
 ```bash
 # 1. get the APK that is installed now
