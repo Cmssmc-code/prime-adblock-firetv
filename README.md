@@ -114,7 +114,7 @@ as `unknown-build`) are what to report. Live `logcat | grep PVNativeHook` shows 
 src/native/   C++ sources of libpvhook.so (inflate_hook.cpp is the core; evlog.cpp the event log)
 tools/        build.sh, swap_lib.py, events.py, find_inflate.py, test.sh
 docs/         HOW_IT_WORKS.md, PORTING.md, RESULTS.md
-prebuilt/     libpvhook-armeabi-v7a.so (built from this tree)
+prebuilt/     libpvhook-v0.1-verified-armeabi-v7a.so (built from tag v0.1-verified), SHA256SUMS
 ```
 
 ## License and credits
