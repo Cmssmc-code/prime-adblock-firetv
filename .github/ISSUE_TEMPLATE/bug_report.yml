@@ -1,0 +1,36 @@
+name: Bug report / an ad got through
+description: An ad was shown, Prime crashed, or the hook did not install.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! Please **do not attach Amazon files** and redact IP addresses, serials and account names.
+  - type: input
+    id: device
+    attributes: {label: Device and OS, placeholder: "Fire TV Stick 4K (AFTKM), Fire OS 8 / Android 11"}
+    validations: {required: true}
+  - type: input
+    id: prime
+    attributes: {label: Prime Video version, placeholder: "6.23.23+v15.5.0.70-armv7a"}
+    validations: {required: true}
+  - type: input
+    id: ours
+    attributes: {label: "Which library? (tag / commit / prebuilt SHA-256)", placeholder: "v0.1-verified"}
+    validations: {required: true}
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Title, season/episode or movie, approximate time of the ad break, what you saw.
+    validations: {required: true}
+  - type: textarea
+    id: summary
+    attributes:
+      label: "`python tools/events.py summary` output"
+      render: text
+  - type: textarea
+    id: lines
+    attributes:
+      label: Event log lines around the incident (or `adb logcat -d | grep PVNativeHook`)
+      render: text

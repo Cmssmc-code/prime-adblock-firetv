@@ -1,0 +1,21 @@
+name: New Prime Video build / port
+description: Support another Prime Video version, or report that it does not apply.
+labels: [port, help wanted]
+body:
+  - type: input
+    id: prime
+    attributes: {label: Prime Video version string, placeholder: "6.24.1+v16.0.0.0-armv7a"}
+    validations: {required: true}
+  - type: input
+    id: buildid
+    attributes: {label: GNU build-id of libignite.so (llvm-readelf -n), placeholder: "1f2df07ac3a6468b"}
+  - type: textarea
+    id: finder
+    attributes:
+      label: Output of `python tools/find_inflate.py libignite.so`
+      render: text
+  - type: textarea
+    id: result
+    attributes:
+      label: Result of a test run
+      description: HOOK-ON? How many AD-GATED / AD-KILLED? Anything in AD-MISSED, AD-UNGATED, CRASH?

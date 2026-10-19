@@ -134,6 +134,13 @@ docs/         HOW_IT_WORKS.md, PORTING.md, RESULTS.md
 prebuilt/     libpvhook-v0.1-verified-armeabi-v7a.so (built from tag v0.1-verified), SHA256SUMS
 ```
 
+## Contributing
+
+Help is very welcome, and not only code: **device reports, test logs and new Prime builds** are the most valuable things
+right now. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the [ROADMAP](ROADMAP.md), or pick an issue labelled
+`good first issue` / `help wanted`. Questions and ideas go in [Discussions](https://github.com/Cmssmc-code/prime-adblock-firetv/discussions).
+The one hard rule: no Amazon code or binaries in the repository.
+
 ## License and credits
 
 GPL-3.0 (inherited from the Morphe patches this builds on). See [NOTICE.md](NOTICE.md). Contributions welcome,

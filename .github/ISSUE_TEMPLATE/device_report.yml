@@ -1,0 +1,33 @@
+name: Device report
+description: It works (or not) on your device. Positive reports are just as useful as bugs.
+labels: [device-report]
+body:
+  - type: input
+    id: device
+    attributes: {label: Device, placeholder: "Fire TV Cube (3rd gen) / Onn 4K / Shield..."}
+    validations: {required: true}
+  - type: input
+    id: os
+    attributes: {label: OS version}
+    validations: {required: true}
+  - type: input
+    id: prime
+    attributes: {label: Prime Video version}
+    validations: {required: true}
+  - type: input
+    id: lib
+    attributes: {label: Library (tag / commit / SHA-256)}
+    validations: {required: true}
+  - type: input
+    id: days
+    attributes: {label: How long did you use it?, placeholder: "5 days, ~12 hours"}
+  - type: textarea
+    id: summary
+    attributes:
+      label: "`python tools/events.py summary` output"
+      render: text
+    validations: {required: true}
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything odd (stalls, spinners, restarts, ads)?

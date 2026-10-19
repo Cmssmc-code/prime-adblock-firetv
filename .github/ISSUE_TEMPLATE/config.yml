@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/Cmssmc-code/prime-adblock-firetv/discussions
+    about: Ask how to install, share results, propose ideas.
+  - name: Upstream Morphe patches for Android TV
+    url: https://github.com/ajstrick81/morphe-androidtv-patches
+    about: The patching project this builds on; issues about the Morphe patch itself belong there.
