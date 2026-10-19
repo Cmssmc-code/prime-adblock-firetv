@@ -32,7 +32,7 @@ often **reports and measurements**, not code. All of these are welcome:
   unknown builds untouched.
 * Add or extend a unit test when you touch the JSON scanning logic (`src/native/test_*.cpp`, built by CI with `g++`).
 * Build: `ANDROID_NDK_HOME=... tools/build.sh`. Run the tests on a device with `tools/test.sh`, or on a PC:
-  `g++ -std=c++17 src/native/test_rego_stream.cpp -o t && ./t`.
+  `g++ -std=c++17 src/native/test_rego_stream.cpp -o t && ./t` (and `test_remote_strip.cpp` together with `remote_strip.cpp`).
 * Commit messages: a short imperative subject; explain *why* in the body when it is not obvious.
 * Open a draft PR early if the change is big. CI must be green.
 
