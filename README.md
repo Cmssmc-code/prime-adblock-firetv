@@ -7,6 +7,26 @@ exact point where it is decompressed. No DNS tricks, no proxy, no rooted device.
 > (AFTKM, Fire OS 8 / Android 11). In an afternoon of testing (Carrie, Twilight, The Hunger Games; pre-rolls,
 > mid-rolls, fast scrubbing across breaks) **10 of 10 ad responses were emptied**, no ad was shown, no crash.
 > That is a small sample on one device and one app build: please read [Limitations](#limitations).
+>
+> **Which code is which.** Tag `v0.1-verified` (branch `verified-v0.1`) is the exact revision that produced those results,
+> and `prebuilt/libpvhook-v0.1-verified-armeabi-v7a.so` is built from it. `main` adds a persistent event log, a crash
+> recorder and a build-id table on top: it compiles but has **not yet been run on a device**; this README will be updated
+> when it has.
+
+## Thank you
+
+None of this exists without the people who did the hard part first. **Huge thanks to:**
+
+* **[ajstrick81](https://github.com/ajstrick81)** and the **[morphe-androidtv-patches](https://github.com/ajstrick81/morphe-androidtv-patches)**
+  project: the Prime Video patch, the in-app native loader (`libpvhook.so`), the GOT import hook, the response filters and,
+  above all, the research that found where an ad response can be edited safely. This repository is built directly on that
+  work (and on its public discussion of the mid-roll problem, upstream issue #120), and keeps its GPL-3.0 license.
+* **The [Morphe team](https://github.com/MorpheApp/morphe-patches)** for Morphe Manager and the patching framework that makes
+  it possible to modify these apps on a TV at all.
+* The authors of the tools used for the analysis: the **Android NDK / LLVM**, **Capstone**, **pyelftools** and **Ghidra**.
+* **APKMirror**, which hosts the official APKs everyone can patch themselves.
+
+If this is useful to you, please star and support the upstream projects first. Fixes that make sense there should go there too.
 
 [Version française en bas / French summary below](#résumé-français)
 
@@ -55,7 +75,7 @@ install the result on the TV and check that it plays. Then replace its native li
 adb shell pm path com.amazon.amazonvideo.livingroom.mod        # -> .../base.apk
 adb pull <that path> base.apk
 
-# 2. build the library (or take prebuilt/libpvhook-armeabi-v7a.so)
+# 2. build the library (or take prebuilt/libpvhook-v0.1-verified-armeabi-v7a.so)
 ANDROID_NDK_HOME=/path/to/ndk tools/build.sh                   # -> build/libpvhook.so
 
 # 3. put it in the APK, align, sign with the Morphe key
