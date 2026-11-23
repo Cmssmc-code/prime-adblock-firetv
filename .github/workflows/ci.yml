@@ -13,6 +13,8 @@ jobs:
           set -e
           g++ -std=c++17 -O1 -Wall src/native/test_rego_stream.cpp -o /tmp/test_rego_stream
           /tmp/test_rego_stream | tail -3
+          g++ -std=c++17 -O1 -Wall src/native/test_inflate_stream.cpp -o /tmp/test_inflate_stream
+          /tmp/test_inflate_stream
           g++ -std=c++17 -O1 -Wall src/native/test_remote_strip.cpp src/native/remote_strip.cpp -o /tmp/test_remote_strip
           /tmp/test_remote_strip | tail -3
 

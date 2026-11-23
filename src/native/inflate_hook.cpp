@@ -8,7 +8,7 @@
 // We overwrite those 8 bytes with `ldr.w pc, [pc, #0]` + the proxy address, and the
 // trampoline below replays them before jumping to inflate()+8.
 #include "inflate_hook.h"
-#include "rego_stream.h"
+#include "inflate_stream.h"
 #include "evlog.h"
 
 #include <android/log.h>
@@ -70,9 +70,7 @@ std::atomic<bool> g_live{false};
 // One tracked ad-response stream per z_stream (few run at once).
 struct Entry {
     const void* strm = nullptr;
-    int match = 0;                 // bytes of "playlist":[ matched so far (SEARCH)
-    bool blanking = false;
-    pvstream::Scan scan;
+    pvinflstream::State scanner;
     size_t blanked = 0;
     int chunks = 0;
 };
@@ -85,8 +83,6 @@ struct Lock {
 };
 std::atomic<int> g_diag{0};
 std::atomic<uint64_t> g_gated{0}, g_done{0}, g_dropped{0};
-
-constexpr char kPlaylist[] = "\"playlist\":[";   // 12 chars
 
 Entry* find(const void* s) { for (auto& e : g_e) if (e.strm == s) return &e; return nullptr; }
 Entry* alloc(const void* s) {
@@ -129,21 +125,11 @@ void on_output(const void* strm, uint8_t* out, size_t n, uint32_t total_before, 
     }
     if (!e) return;
     char* c = reinterpret_cast<char*>(out);
-    size_t i = 0;
-    if (!e->blanking) {                                   // look for "playlist":[ (may straddle chunks)
-        for (; i < n; ++i) {
-            if (c[i] == kPlaylist[e->match]) {
-                if (++e->match == 12) { e->blanking = true; e->scan = pvstream::Scan{}; ++i; break; }
-            } else {
-                e->match = (c[i] == kPlaylist[0]) ? 1 : 0;
-            }
-        }
-    }
-    if (e->blanking) {
-        size_t end = pvstream::scan_blank(c + i, n - i, e->scan, true);
-        e->blanked += end;
+    const pvinflstream::Result result = pvinflstream::on_chunk(e->scanner, c, n);
+    if (result.scanned_array) {
+        e->blanked += result.blanked;
         ++e->chunks;
-        if (end < n - i) {                                // closing ']' reached: done
+        if (result.complete) {
             g_done.fetch_add(1, std::memory_order_relaxed);
             LOGI("PVKILL path=tv-inflate chunks=%d blanked=%zu", e->chunks, e->blanked);
             pvev::log("AD-KILLED chunks=%d bytes=%zu", e->chunks, e->blanked);
@@ -152,9 +138,9 @@ void on_output(const void* strm, uint8_t* out, size_t n, uint32_t total_before, 
         }
     }
     if (stream_end) {
-        if (e->blanking) LOGW("PVINFL stream ended inside the playlist array (blanked=%zu)", e->blanked);
+        if (e->scanner.blanking) LOGW("PVINFL stream ended inside the playlist array (blanked=%zu)", e->blanked);
         else             LOGW("PVINFL stream ended without a playlist array");
-        pvev::log("AD-MISSED reason=%s bytes=%zu", e->blanking ? "ended-inside-array" : "no-array", e->blanked);
+        pvev::log("AD-MISSED reason=%s bytes=%zu", e->scanner.blanking ? "ended-inside-array" : "no-array", e->blanked);
         g_dropped.fetch_add(1, std::memory_order_relaxed);
         e->strm = nullptr;
     }
